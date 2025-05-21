@@ -52,7 +52,7 @@ import java.util.Date
 import java.util.Locale
 
 
-// --- MODELOS DE DATOS ---
+
 data class CityGeoInfo(
     val name: String,
     val lat: Double,
@@ -105,7 +105,7 @@ data class Temp(
     val max: Double
 )
 
-// --- CLIENTE KTOR ---
+
 object KtorClient {
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -156,7 +156,7 @@ object KtorClient {
     }
 }
 
-// --- COMPOSABLE PRINCIPAL ---
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndexView(modifier: Modifier = Modifier) {
@@ -247,20 +247,6 @@ fun IndexView(modifier: Modifier = Modifier) {
             Text("Viento: ${it.wind.speed} m/s")
 
             Spacer(modifier = Modifier.height(16.dp))
-
-//            Button(onClick = {
-//                val shareIntent = Intent().apply {
-//                    action = Intent.ACTION_SEND
-//                    putExtra(
-//                        Intent.EXTRA_TEXT,
-//                        "Pronóstico para ${it.name}: ${it.main.temp}°C, ${it.weather[0].description}"
-//                    )
-//                    type = "text/plain"
-//                }
-//                context.startActivity(Intent.createChooser(shareIntent, "Compartir clima"))
-//            }) {
-//                Text("Compartir")
-//            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
