@@ -1,5 +1,6 @@
 package com.example.climaapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,15 +9,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.climaapp.data.api.KtorClient
@@ -25,8 +21,7 @@ import com.example.climaapp.data.models.ForecastResponse
 import com.example.climaapp.data.models.WeatherResponse
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +43,7 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
     var forecast by remember { mutableStateOf<ForecastResponse?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     val apiKey = "ed19f75d2b20a8a8c280df206dcb079a"
+    val context = LocalContext.current
 
     LaunchedEffect(ciudad) {
         scope.launch {
@@ -66,14 +62,14 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
         }
     }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(24.dp)
-        .verticalScroll(rememberScrollState()),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Clima en ${ciudad.uppercase()}", style = MaterialTheme.typography.headlineMedium)
-
         Spacer(modifier = Modifier.height(16.dp))
 
         error?.let {
@@ -93,6 +89,31 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
             Text("Temp: ${it.main.temp}°C (Sensación: ${it.main.feels_like}°C)")
             Text("Humedad: ${it.main.humidity}%")
             Text("Viento: ${it.wind.speed} m/s")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para compartir
+            val textoPronostico = """
+                Pronóstico para ${ciudad.uppercase()}:
+                - Estado: ${it.weather[0].main} (${it.weather[0].description})
+                - Temperatura: ${it.main.temp}°C (Sensación: ${it.main.feels_like}°C)
+                - Humedad: ${it.main.humidity}%
+                - Viento: ${it.wind.speed} m/s
+            """.trimIndent()
+
+            Button(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, "Pronóstico del clima")
+                        putExtra(Intent.EXTRA_TEXT, textoPronostico)
+                    }
+                    context.startActivity(Intent.createChooser(intent, "Compartir con"))
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Compartir pronóstico")
+            }
         }
 
         Spacer(Modifier.height(8.dp))
@@ -117,8 +138,7 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .padding(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         AsyncImage(
                             model = iconUrl,
@@ -137,7 +157,6 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-
         Button(onClick = onBack) {
             Text("Volver")
         }
