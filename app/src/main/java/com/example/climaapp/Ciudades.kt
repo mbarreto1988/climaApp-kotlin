@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import com.example.climaapp.ui.theme.ClimaAppTheme
 
+
+// hola mundo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CiudadesView(modifier: Modifier = Modifier) {
