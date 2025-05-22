@@ -125,31 +125,40 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                 .map { it.value.first() }
                 .take(5)
 
-            porDia.forEach { dia ->
-                val fecha = SimpleDateFormat("EEEE dd/MM", Locale("es")).format(Date(dia.dt * 1000))
-                val icon = dia.weather.firstOrNull()?.icon ?: "01d"
-                val iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png"
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Column {
+                    porDia.forEach { dia ->
+                        val fecha = SimpleDateFormat("EEEE dd/MM", Locale("es")).format(Date(dia.dt * 1000))
+                        val icon = dia.weather.firstOrNull()?.icon ?: "01d"
+                        val iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png"
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        AsyncImage(
-                            model = iconUrl,
-                            contentDescription = null,
-                            modifier = Modifier.size(48.dp)
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text(text = fecha, style = MaterialTheme.typography.titleMedium)
-                            Text("Temp: ${dia.main.temp}°C")
-                            Text("Clima: ${dia.weather.firstOrNull()?.description}")
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                AsyncImage(
+                                    model = iconUrl,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(text = fecha, style = MaterialTheme.typography.titleMedium)
+                                    Text("Temp: ${dia.main.temp}°C")
+                                    Text("Clima: ${dia.weather.firstOrNull()?.description}")
+                                }
+                            }
                         }
                     }
                 }
