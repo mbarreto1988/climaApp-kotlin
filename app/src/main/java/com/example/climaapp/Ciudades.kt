@@ -24,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.TextFieldDefaults
+import com.example.climaapp.ui.theme.TextFieldBackground
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,10 +34,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.platform.LocalContext
 import com.example.climaapp.ui.theme.ClimaAppTheme
 
@@ -88,11 +93,16 @@ fun CiudadesView(modifier: Modifier = Modifier) {
                 onValueChange = { cityInput = it },
                 label = { Text("Ciudad") },
                 singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = TextFieldBackground,
+                    unfocusedContainerColor = TextFieldBackground
+                ),
                 modifier = Modifier
                     .weight(1f)
                     .clip(MaterialTheme.shapes.medium),
                 shape = MaterialTheme.shapes.medium
             )
+
 
             Spacer(modifier = Modifier.width(8.dp))
 
@@ -103,50 +113,45 @@ fun CiudadesView(modifier: Modifier = Modifier) {
                     context.startActivity(intent)
                 },
                 enabled = cityInput.isNotBlank(),
-                modifier = Modifier.size(56.dp),
-                shape = CircleShape,
-                contentPadding = PaddingValues(0.dp)
+                shape = MaterialTheme.shapes.large,
+                modifier = Modifier
+                    .height(56.dp)
+                    .clip(MaterialTheme.shapes.large)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.LocationOn,
-                    contentDescription = "Buscar ubicación",
-                    modifier = Modifier.size(28.dp)
-                )
+                Icon(Icons.Filled.LocationOn, contentDescription = "Ubicación")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Buscar ciudad")
             }
+
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
         ) {
-            Text(
-                text = "Ciudades disponibles",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Black
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(550.dp)
-            ) {
-                items(ciudades) { ciudad ->
-                    Text(
-                        text = ciudad,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                            .clickable { cityInput = ciudad },
-                        color = Color.Black
-                    )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Ciudades disponibles",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyColumn {
+                    items(ciudades) { ciudad ->
+                        Text(
+                            text = ciudad,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { cityInput = ciudad }
+                                .padding(8.dp),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
         }
