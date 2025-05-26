@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.climaapp.ui.theme.ClimaAppTheme
 
-
+// styles
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CiudadesView(modifier: Modifier = Modifier) {
