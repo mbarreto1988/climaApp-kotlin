@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,12 +25,30 @@ import androidx.compose.ui.graphics.Color
 import com.example.climaapp.ui.theme.ClimaAppTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Locale
+
+fun obtenerHora(s: String): String {
+    val formatoEntrada = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    val formatoSalida = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+    val fecha = formatoEntrada.parse(s)
+    return formatoSalida.format(fecha!!)
+}
+
+fun convertirTimestampAHoraArgentinaCompat(timestamp: Long): String {
+    val date = Date(timestamp * 1000)
+    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("es", "AR"))
+    sdf.timeZone = TimeZone.getTimeZone("America/Argentina/Buenos_Aires")
+    val diaHora= sdf.format(date)
+    return obtenerHora(diaHora);
+}
 
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,10 +84,12 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                     weather = KtorClient.getCurrentWeather("$ciudad,ar", apiKey)
                     forecast = KtorClient.get7DayForecast(geo[0].lat, geo[0].lon, apiKey)
                 } else {
-                    error = "No pudimos encontrar la ciudad ingresada. Verifica el nombre e intenta de nuevo."
+                    error =
+                        "No pudimos encontrar la ciudad ingresada. Verifica el nombre e intenta de nuevo."
                 }
             } catch (e: Exception) {
-                error = "No pudimos cargar el clima. Revisa tu conexión a internet o intenta más tarde."
+                error =
+                    "No pudimos cargar el clima. Revisa tu conexión a internet o intenta más tarde."
             }
         }
     }
@@ -81,7 +102,8 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Clima en ${ciudad.uppercase()}",
+        Text(
+            "Clima en ${ciudad.uppercase()}",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -126,7 +148,8 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
             ) {
                 CircularProgressIndicator()
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Cargando datos del clima...",
+                Text(
+                    "Cargando datos del clima...",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -141,16 +164,20 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                 modifier = Modifier.size(96.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Clima: ${it.weather[0].main} (${it.weather[0].description})",
+            Text(
+                "Clima: ${it.weather[0].main} (${it.weather[0].description})",
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Text("Temp: ${it.main.temp}°C (Sensación: ${it.main.feels_like}°C)",
+            Text(
+                "Temp: ${it.main.temp}°C (Sensación: ${it.main.feels_like}°C)",
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Text("Humedad: ${it.main.humidity}%",
+            Text(
+                "Humedad: ${it.main.humidity}%",
                 color = MaterialTheme.colorScheme.onBackground
             )
-            Text("Viento: ${it.wind.speed} m/s",
+            Text(
+                "Viento: ${it.wind.speed} m/s",
                 color = MaterialTheme.colorScheme.onBackground
             )
 
@@ -191,14 +218,15 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
 
 
         Spacer(Modifier.height(8.dp))
-        Text("Pronóstico 5 días", style = MaterialTheme.typography.titleMedium,
+        Text(
+            "Pronóstico 5 días", style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
 
         forecast?.let { forecastData ->
             val porDia = forecastData.list
                 .groupBy { SimpleDateFormat("yyyy-MM-dd", Locale("es")).format(Date(it.dt * 1000)) }
-                .map { it.value.first() }
+                .entries
                 .take(5)
 
             Box(
@@ -208,15 +236,39 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Column {
-                    porDia.forEach { dia ->
-                        val fecha = SimpleDateFormat("EEEE dd/MM", Locale("es")).format(Date(dia.dt * 1000))
-                        val icon = dia.weather.firstOrNull()?.icon ?: "01d"
+                    porDia.forEach { (fechaKey, listaDelDia) ->
+                        val diaResumen = listaDelDia.first()
+                        val fecha = SimpleDateFormat(
+                            "EEEE dd/MM",
+                            Locale("es")
+                        ).format(Date(diaResumen.dt * 1000))
+                        val icon = diaResumen.weather.firstOrNull()?.icon ?: "01d"
                         val iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png"
+                        val datosDia = listaDelDia.map {
+                            DatoClima(
+                                convertirTimestampAHoraArgentinaCompat(it.dt),
+                                it.main.temp
+                            )
+                        } as ArrayList<DatoClima>
 
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp),
+                                .padding(vertical = 8.dp)
+                                .clickable {
+                                    val intent = Intent(context, DetalleClimaActivity::class.java)
+
+                                    intent.putExtra("fecha", fecha)
+                                    intent.putExtra("temp", diaResumen.main.temp.toString())
+                                    intent.putExtra(
+                                        "descripcion",
+                                        diaResumen.weather.firstOrNull()?.description ?: "Sin datos"
+                                    )
+                                    intent.putExtra("icon", icon)
+                                    intent.putExtra("datosDia", datosDia)
+
+                                    context.startActivity(intent)
+                                },
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                             colors = CardDefaults.cardColors(containerColor = Color(0xFFCCF2E8))
                         ) {
@@ -232,27 +284,29 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
                                     Text(text = fecha, style = MaterialTheme.typography.titleMedium)
-                                    Text("Temp: ${dia.main.temp}°C")
-                                    Text("Clima: ${dia.weather.firstOrNull()?.description}")
+                                    Text("Temp: ${diaResumen.main.temp}°C")
+                                    Text("Clima: ${diaResumen.weather.firstOrNull()?.description}")
+
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onBack,
-            shape = MaterialTheme.shapes.large,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFd0bcff),
-                contentColor = Color.Black
-            )
-        ) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Volver")
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = onBack,
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFd0bcff),
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Volver")
+                }
+            }
         }
     }
 }
