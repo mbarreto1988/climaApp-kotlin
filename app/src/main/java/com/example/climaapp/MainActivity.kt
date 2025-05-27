@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import com.example.climaapp.data.tema.TemaViewModel
 import com.example.climaapp.ui.theme.ClimaAppTheme
 
@@ -20,10 +19,9 @@ class MainActivity : ComponentActivity() {
 
             ClimaAppTheme(
                 darkTheme = isDark,
-                dynamicColor = true //
+                dynamicColor = true
             ) {
                 CiudadesView(
-                    modifier = Modifier,
                     temaViewModel = temaViewModel
                 )
             }

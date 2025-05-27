@@ -2,7 +2,6 @@ package com.example.climaapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -25,10 +24,10 @@ import androidx.compose.ui.graphics.Color
 import com.example.climaapp.ui.theme.ClimaAppTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
+import com.example.climaapp.data.models.DatoClima
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,13 +46,12 @@ fun convertirTimestampAHoraArgentinaCompat(timestamp: Long): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("es", "AR"))
     sdf.timeZone = TimeZone.getTimeZone("America/Argentina/Buenos_Aires")
     val diaHora= sdf.format(date)
-    return obtenerHora(diaHora);
+    return obtenerHora(diaHora)
 }
 
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("CLIMA", "Estoy en el Clima")
         val ciudad = intent.getStringExtra("ciudad") ?: ""
         val isDark = intent.getBooleanExtra("darkTheme", false)
         setContent {
@@ -183,7 +181,6 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón con ícono para compartir
             val textoPronostico = """
               Pronóstico para ${ciudad.uppercase()}:
               - Estado: ${it.weather[0].main} (${it.weather[0].description})
@@ -293,20 +290,21 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    onClick = onBack,
-                    shape = MaterialTheme.shapes.large,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFd0bcff),
-                        contentColor = Color.Black
-                    )
-                ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Volver")
-                }
+
             }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(
+            onClick = onBack,
+            shape = MaterialTheme.shapes.large,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFd0bcff),
+                contentColor = Color.Black
+            )
+        ) {
+            Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Volver")
         }
     }
 }

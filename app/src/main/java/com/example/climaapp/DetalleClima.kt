@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.climaapp.data.models.DatoClima
 import com.example.climaapp.ui.GraficosClima
 import com.google.gson.Gson
 import kotlin.math.roundToInt
