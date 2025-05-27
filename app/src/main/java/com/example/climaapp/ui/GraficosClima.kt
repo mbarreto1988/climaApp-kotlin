@@ -16,9 +16,7 @@ import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
-import kotlinx.coroutines.runBlocking
 import com.patrykandpatrick.vico.core.cartesian.axis.Axis
-
 
 
 @Composable
