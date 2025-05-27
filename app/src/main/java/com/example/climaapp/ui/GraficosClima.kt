@@ -62,7 +62,6 @@ fun GraficosClima(
     )
 }
 
-
 @Composable
 @Preview
 private fun Preview() {
