@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.contentpager)
+    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     // Ktor
     implementation("io.ktor:ktor-client-core:2.3.9")

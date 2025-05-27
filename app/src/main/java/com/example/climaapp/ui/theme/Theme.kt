@@ -35,7 +35,7 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = Color.White,
     surface = Color(0xFF1B263B),
     onSurface = Color.White,
-    error = ErrorColor
+    error = ErrorColor,
 )
 
 
@@ -48,14 +48,15 @@ fun ClimaAppTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val context = LocalContext.current
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> {
+            if (darkTheme) darkColorScheme() else lightColorScheme()
+        }
     }
 
     MaterialTheme(

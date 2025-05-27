@@ -41,13 +41,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import com.example.climaapp.data.tema.TemaViewModel
 import com.example.climaapp.ui.theme.ClimaAppTheme
+import androidx.compose.material.icons.filled.Brightness2
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.ButtonDefaults
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CiudadesView(modifier: Modifier = Modifier) {
+fun CiudadesView(modifier: Modifier = Modifier, temaViewModel: TemaViewModel) {
+    val isDarkMode by temaViewModel.isDarkMode.collectAsState()
     var cityInput by remember { mutableStateOf("") }
     val context = LocalContext.current
     val ciudades = listOf(
@@ -73,83 +82,102 @@ fun CiudadesView(modifier: Modifier = Modifier) {
         "Río Gallegos"
     )
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
-                value = cityInput,
-                onValueChange = { cityInput = it },
-                label = { Text("Ciudad") },
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = TextFieldBackground,
-                    unfocusedContainerColor = TextFieldBackground
-                ),
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(MaterialTheme.shapes.medium),
-                shape = MaterialTheme.shapes.medium
-            )
+            Spacer(modifier = Modifier.height(32.dp))
 
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Button(
-                onClick = {
-                    val intent = Intent(context, ClimaActivity::class.java)
-                    intent.putExtra("ciudad", cityInput)
-                    context.startActivity(intent)
-                },
-                enabled = cityInput.isNotBlank(),
-                shape = MaterialTheme.shapes.large,
-                modifier = Modifier
-                    .height(56.dp)
-                    .clip(MaterialTheme.shapes.large)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Filled.LocationOn, contentDescription = "Ubicación")
+                TextField(
+                    value = cityInput,
+                    onValueChange = { cityInput = it },
+                    label = { Text("Ciudad") },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(MaterialTheme.shapes.medium),
+                    shape = MaterialTheme.shapes.medium
+                )
+
+
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Buscar ciudad")
+
+                Button(
+                    onClick = {
+                        val intent = Intent(context, ClimaActivity::class.java)
+                        intent.putExtra("ciudad", cityInput)
+                        intent.putExtra("darkTheme", isDarkMode)
+                        context.startActivity(intent)
+                    },
+                    enabled = cityInput.isNotBlank(),
+                    modifier = Modifier
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFd0bcff),
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Icon(Icons.Filled.Search, contentDescription = "Ubicación")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+
+                IconButton(onClick = { temaViewModel.toggleDarkMode() }) {
+                    val icon = if (!isDarkMode) Icons.Filled.Brightness2 else Icons.Filled.WbSunny
+                    val description = if (isDarkMode) "Modo oscuro" else "Modo claro"
+
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = description,
+                        tint = MaterialTheme.colorScheme.onSurface,
+
+                    )
+                }
+
+
             }
 
-        }
+            Spacer(modifier = Modifier.height(32.dp))
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.large,
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Ciudades disponibles",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn {
-                    items(ciudades) { ciudad ->
-                        Text(
-                            text = ciudad,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { cityInput = ciudad }
-                                .padding(8.dp),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Ciudades disponibles",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LazyColumn {
+                        items(ciudades) { ciudad ->
+                            Text(
+                                text = ciudad,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { cityInput = ciudad }
+                                    .padding(8.dp),
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
@@ -160,8 +188,10 @@ fun CiudadesView(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun CiudadesViewPreview() {
-    ClimaAppTheme {
-        CiudadesView()
+fun CiudadesPreview() {
+    val fakeVM = remember { TemaViewModel() }
+    val dark = fakeVM.isDarkMode.collectAsState().value
+    ClimaAppTheme(darkTheme = dark) {
+        CiudadesView(temaViewModel = fakeVM)
     }
 }
