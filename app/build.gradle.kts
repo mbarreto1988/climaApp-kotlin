@@ -64,7 +64,11 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose-m3:1.14.0")
     implementation("androidx.compose.ui:ui:1.5.0")
 
+    debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.junit)
 
+    testImplementation ("io.mockk:mockk:1.13.10")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
 
     // Vico Charts
