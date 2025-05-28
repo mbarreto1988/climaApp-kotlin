@@ -1,5 +1,7 @@
 package com.example.climaapp.data.models
 
+import java.io.Serializable
+
 data class CityGeoInfo(
     val name: String,
     val lat: Double,
@@ -17,7 +19,9 @@ data class WeatherResponse(
 data class Main(
     val temp: Double,
     val feels_like: Double,
-    val humidity: Int
+    val humidity: Int,
+    val temp_min: Double,
+    val temp_max: Double
 )
 
 data class Weather(
@@ -39,4 +43,9 @@ data class ForecastItem(
     val main: Main,
     val weather: List<Weather>
 )
+
+data class DatoClima(
+    val dt: String,
+    val temp: Double
+) : Serializable
 
