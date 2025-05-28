@@ -56,14 +56,14 @@ class ClimaActivity : ComponentActivity() {
         val isDark = intent.getBooleanExtra("darkTheme", false)
         setContent {
             ClimaAppTheme(darkTheme = isDark) {
-                ClimaScreen(ciudad = ciudad, onBack = { finish() })
+                ClimaScreen(ciudad = ciudad, isDark = isDark, onBack = { finish() })
             }
         }
     }
 }
 
 @Composable
-fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
+fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     var cityInfo by remember { mutableStateOf<CityGeoInfo?>(null) }
     var weather by remember { mutableStateOf<WeatherResponse?>(null) }
@@ -72,6 +72,7 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
     val apiKey = "ed19f75d2b20a8a8c280df206dcb079a"
     val context = LocalContext.current
     val isLoading = weather == null && error == null
+
 
     LaunchedEffect(ciudad) {
         scope.launch {
@@ -257,6 +258,7 @@ fun ClimaScreen(ciudad: String, onBack: () -> Unit) {
 
                                     intent.putExtra("fecha", fecha)
                                     intent.putExtra("temp", diaResumen.main.temp.toString())
+                                    intent.putExtra("isDarkTheme", isDark)
                                     intent.putExtra(
                                         "descripcion",
                                         diaResumen.weather.firstOrNull()?.description ?: "Sin datos"
