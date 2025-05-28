@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -49,8 +50,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.contentpager)
-    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     // Ktor
     implementation("io.ktor:ktor-client-core:2.3.9")
@@ -58,25 +57,6 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.9")
     implementation("io.ktor:ktor-serialization-gson:2.3.9")
     implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation ("com.patrykandpatrick.vico:compose:1.14.0")
-    implementation ("com.patrykandpatrick.vico:core:1.14.0")
-    implementation("androidx.compose.foundation:foundation:1.5.0")
-    implementation("com.patrykandpatrick.vico:compose-m3:1.14.0")
-    implementation("androidx.compose.ui:ui:1.5.0")
-
-
-
-
-    // Vico Charts
-    implementation(libs.compose.v1130)
-    implementation(libs.compose.m3.v1130)
-    implementation(libs.core)
-
-    implementation(libs.vico.core)
-    implementation(libs.vico.compose)
-    implementation(libs.vico.compose.m3)
-    implementation(libs.vico.views)
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
