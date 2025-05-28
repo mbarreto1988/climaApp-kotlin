@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import com.example.climaapp.ui.theme.ClimaAppTheme
 
+// test
 
 // hola mundo
 @OptIn(ExperimentalMaterial3Api::class)
