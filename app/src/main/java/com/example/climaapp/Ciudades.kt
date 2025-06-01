@@ -44,6 +44,8 @@ import com.example.climaapp.ui.theme.ClimaAppTheme
 import androidx.compose.material.icons.filled.Brightness2
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.ButtonDefaults
+import com.example.climaapp.data.tema.TemaIntent
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,7 +131,7 @@ fun CiudadesView(temaViewModel: TemaViewModel) {
                 }
                 Spacer(modifier = Modifier.width(8.dp))
 
-                IconButton(onClick = { temaViewModel.toggleDarkMode() }) {
+                IconButton(onClick = { temaViewModel.processIntent(TemaIntent.ToggleTheme)}) {
                     val icon = if (!isDarkMode) Icons.Filled.Brightness2 else Icons.Filled.WbSunny
                     val description = if (isDarkMode) "Modo oscuro" else "Modo claro"
 
