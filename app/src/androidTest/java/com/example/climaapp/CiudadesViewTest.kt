@@ -21,7 +21,7 @@ class FakeTemaViewModel : TemaViewModel() {
     private val _isDarkMode = MutableStateFlow(false)
     override val isDarkMode: StateFlow<Boolean> get() = _isDarkMode
 
-    override fun toggleDarkMode() {
+    fun toggleDarkMode() {
         _isDarkMode.value = !_isDarkMode.value
     }
 }
@@ -58,7 +58,10 @@ class CiudadesViewTest {
         }
 
         composeTestRule
-            .onNode(hasContentDescription("Ubicación"))
+            .onNode(
+                hasClickAction() and hasAnyDescendant(hasContentDescription("Ubicación")),
+                useUnmergedTree = true
+            )
             .assertIsNotEnabled()
     }
 
