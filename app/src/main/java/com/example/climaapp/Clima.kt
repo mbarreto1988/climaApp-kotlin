@@ -51,7 +51,7 @@ fun convertirTimestampAHoraArgentinaCompat(timestamp: Long): String {
 
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState = savedInstanceState)
         val ciudad = intent.getStringExtra("ciudad") ?: ""
         val isDark = intent.getBooleanExtra("darkTheme", false)
         setContent {
