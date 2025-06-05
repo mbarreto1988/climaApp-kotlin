@@ -123,8 +123,8 @@ fun CiudadesView(temaViewModel: TemaViewModel) {
                     modifier = Modifier
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFd0bcff),
-                        contentColor = Color.Black
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Icon(Icons.Filled.Search, contentDescription = "Ubicación")
@@ -140,7 +140,7 @@ fun CiudadesView(temaViewModel: TemaViewModel) {
                         contentDescription = description,
                         tint = MaterialTheme.colorScheme.onSurface,
 
-                    )
+                        )
                 }
 
 

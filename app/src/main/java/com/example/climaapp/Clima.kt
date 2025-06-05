@@ -203,8 +203,8 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFd0bcff),
-                    contentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
 
             ) {
@@ -300,8 +300,8 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
             onClick = onBack,
             shape = MaterialTheme.shapes.large,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFd0bcff),
-                contentColor = Color.Black
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
