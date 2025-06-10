@@ -16,7 +16,6 @@ class DetalleClimaTest {
 
     @Test
     fun muestraDatosRecibidosCorrectamente() {
-        // Datos simulados para test
         val datosDia = arrayListOf(
             DatoClima("00:00", 15.0),
             DatoClima("03:00", 13.5),
