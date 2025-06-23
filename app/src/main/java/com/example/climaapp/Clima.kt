@@ -61,7 +61,7 @@ fun convertirTimestampAFechaArgentinaCompat(timestamp: Long): String {
 
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState = savedInstanceState)
         val ciudad = intent.getStringExtra("ciudad") ?: ""
         val isDark = intent.getBooleanExtra("darkTheme", false)
 
@@ -214,8 +214,8 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFd0bcff),
-                    contentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
 
             ) {
@@ -313,8 +313,8 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
             onClick = onBack,
             shape = MaterialTheme.shapes.large,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFd0bcff),
-                contentColor = Color.Black
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Volver")

@@ -1,7 +1,7 @@
 [versions]
 agp = "8.9.1"
-compose = "1.13.0"
-composeM3 = "1.13.0"
+compose = "1.6.6"
+composeM3 = "1.2.1"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -9,7 +9,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
+composeBom = "2024.05.00"
 contentpager = "1.0.0"
 vico = "2.1.2"
 
@@ -24,18 +24,18 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "compose" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeM3" }
 androidx-contentpager = { group = "androidx.contentpager", name = "contentpager", version.ref = "contentpager" }
 vico-views = { group = "com.patrykandpatrick.vico", name = "views", version.ref = "vico" }
 vico-core = { module = "com.patrykandpatrick.vico:core", version.ref = "vico" }
 vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
 vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version = "1.6.0" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version = "1.6.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
