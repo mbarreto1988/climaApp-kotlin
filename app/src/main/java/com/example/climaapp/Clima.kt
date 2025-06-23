@@ -2,6 +2,7 @@ package com.example.climaapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Locale
+import com.google.gson.Gson
 
 fun obtenerHora(s: String): String {
     val formatoEntrada = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
@@ -49,11 +51,20 @@ fun convertirTimestampAHoraArgentinaCompat(timestamp: Long): String {
     return obtenerHora(diaHora)
 }
 
+fun convertirTimestampAFechaArgentinaCompat(timestamp: Long): String {
+    val date = Date(timestamp * 1000)
+    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("es", "AR"))
+    sdf.timeZone = TimeZone.getTimeZone("America/Argentina/Buenos_Aires")
+    val diaHora= sdf.format(date)
+    return diaHora
+}
+
 class ClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val ciudad = intent.getStringExtra("ciudad") ?: ""
         val isDark = intent.getBooleanExtra("darkTheme", false)
+
         setContent {
             ClimaAppTheme(darkTheme = isDark) {
                 ClimaScreen(ciudad = ciudad, isDark = isDark, onBack = { finish() })
@@ -72,7 +83,7 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
     val apiKey = "ed19f75d2b20a8a8c280df206dcb079a"
     val context = LocalContext.current
     val isLoading = weather == null && error == null
-
+    val gson = Gson()
 
     LaunchedEffect(ciudad) {
         scope.launch {
@@ -220,13 +231,15 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
             "Pronóstico 5 días", style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
-
+        Log.d("forecastG", gson.toJson(forecast))
         forecast?.let { forecastData ->
             val porDia = forecastData.list
-                .groupBy { SimpleDateFormat("yyyy-MM-dd", Locale("es")).format(Date(it.dt * 1000)) }
+                .groupBy { convertirTimestampAFechaArgentinaCompat(it.dt) }
                 .entries
                 .take(5)
 
+            Log.d("forecastDataG", gson.toJson(forecastData))
+            Log.d("porDiaG", gson.toJson(porDia))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

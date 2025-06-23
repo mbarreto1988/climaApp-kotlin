@@ -27,13 +27,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import androidx.compose.ui.graphics.Color
-/*import com.patrykandpatrick.vico.core.AxisDefaults
-import com.patrykandpatrick.vico.compose.axis.Axis
-import com.patrykandpatrick.vico.compose.axis.AxisLabel
-import com.patrykandpatrick.vico.compose.axis.axisLabel
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
-*/
+
 
 class GraficosClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,30 +79,6 @@ fun GraficosClima(
             }
         }
     }
-
-    /*
-    val bottomAxis = HorizontalAxis.rememberBottom(
-        valueFormatter = horaFormatter,
-        label = AxisDefaults.Labels(
-            textColor = labelColor
-        ),
-        line = AxisDefaults.Line(
-            color = lineColor
-        ),
-        guideline = AxisDefaults.Guideline(
-            color = guidelineColor
-        )
-    )
-
-    val verticalAxis = Axis.vertical(
-        axisLabel = AxisLabel(
-            textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Red,
-                fontSize = 12.sp
-            )
-        )
-    )
-    */
 
     Column(
         modifier = modifier

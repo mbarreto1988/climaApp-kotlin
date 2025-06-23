@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +15,7 @@ import com.example.climaapp.data.models.DatoClima
 import com.example.climaapp.ui.GraficosClima
 import com.example.climaapp.ui.theme.ClimaAppTheme
 import com.google.gson.Gson
-import kotlin.math.roundToInt
+
 
 class DetalleClimaActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +55,10 @@ class DetalleClimaActivity : ComponentActivity() {
                         }
                     }
 
-                    val temperaturas = datosDia.map { it.temp.roundToInt().toFloat() }
-                    val horas = listOf(0f, 3f, 6f, 9f, 12f, 15f, 18f)
+                    val temperaturas = datosDia.map { it.temp.toFloat() }
+                    val totalHoras = List(8) { it * 3f }
+                    //Muestra solo las temperaturas restantes del dia actual porque la api solo devuelve las temperaturas restantes dependiendo la hora del dia que se consulte.
+                    val horas = totalHoras.takeLast(temperaturas.size)
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
