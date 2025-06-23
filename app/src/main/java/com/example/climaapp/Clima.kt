@@ -43,6 +43,17 @@ fun obtenerHora(s: String): String {
     return formatoSalida.format(fecha!!)
 }
 
+fun obtenerDiaDeLaSemana(fechaString: String): String {
+    val formato = SimpleDateFormat("dd/MM/yyyy", Locale("es", "ES")) // Español
+    val fecha = formato.parse(fechaString) // Convertimos a Date
+    val calendario = Calendar.getInstance()
+    calendario.time = fecha
+
+    // Obtenemos el día de la semana en palabras (Ej: "miércoles")
+    val formatoDia = SimpleDateFormat("EEEE", Locale("es", "ES"))
+    return formatoDia.format(calendario.time) + ' ' +  fechaString
+}
+
 fun convertirTimestampAHoraArgentinaCompat(timestamp: Long): String {
     val date = Date(timestamp * 1000)
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("es", "AR"))
@@ -231,15 +242,15 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
             "Pronóstico 5 días", style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
-        Log.d("forecastG", gson.toJson(forecast))
         forecast?.let { forecastData ->
+
             val porDia = forecastData.list
                 .groupBy { convertirTimestampAFechaArgentinaCompat(it.dt) }
-                .entries
+                .toSortedMap()
+                .map { it.toPair() }
                 .take(5)
 
-            Log.d("forecastDataG", gson.toJson(forecastData))
-            Log.d("porDiaG", gson.toJson(porDia))
+            Log.d("porDia", gson.toJson(porDia))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -249,10 +260,10 @@ fun ClimaScreen(ciudad: String, isDark: Boolean, onBack: () -> Unit) {
                 Column {
                     porDia.forEach { (fechaKey, listaDelDia) ->
                         val diaResumen = listaDelDia.first()
-                        val fecha = SimpleDateFormat(
-                            "EEEE dd/MM",
-                            Locale("es")
-                        ).format(Date(diaResumen.dt * 1000))
+
+                        var diaFecha=convertirTimestampAFechaArgentinaCompat(diaResumen.dt)
+                        val fecha = obtenerDiaDeLaSemana(diaFecha);
+
                         val icon = diaResumen.weather.firstOrNull()?.icon ?: "01d"
                         val iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png"
                         val datosDia = listaDelDia.map {
